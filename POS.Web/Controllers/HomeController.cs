@@ -1,21 +1,25 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using POS.Web.Models;
+using POS.Web.Services;
 
 namespace POS.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly DapperServices _dapperServices;
+        public HomeController(ILogger<HomeController> logger, DapperServices dapperservices)
         {
             _logger = logger;
+            _dapperServices = dapperservices;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = await _dapperServices.GetProjectsAsync(); 
+            return View(products);
         }
 
         public IActionResult Privacy()
